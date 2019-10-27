@@ -1,43 +1,80 @@
 package pw.backend.reactbackend.entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="Users")
 public class User {
 
-    String UserId;
-    String UserLogin;
-    String UserName;
-    String UserLastName;
-    String UserBirth;
+    @Column(name="id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
+    @Column(name = "login")
+    private String login;
+    @Column(name = "firstname")
+    private String firstname;
 
-    public String getUserId() {
-        return UserId;
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Column(name = "birth")
+    private String birth;
+
+    @Column(name = "active")
+    private Boolean active;
+    protected User() {
     }
-    public void setUserId(String UserId) {
-        this.UserId = UserId;
+
+    public User(String login, String firstName, String lastName,String birth,Boolean active) {
+        this.login =login;
+        this.firstname = firstName;
+        this.lastname = lastName;
+        this.birth =birth;
+        this.active=active;
     }
-    public String getUserLogin() {
-        return UserLogin;
+
+    public String ToString()
+    {
+        return "id: " +this.getId() +"\nlogin: " + this.getLogin()+"\nfirstname: " + this.getFirstname()+"\nlastname: " + this.getLastname()+"\nbirth: " + this.getBirth()+"\nactive : " + this.getActive();
     }
-    public void setUserLogin(String UserLogin) {
-        this.UserLogin = UserLogin;
+
+    public long getId() {
+        return id;
     }
-    public String getUserName() {
-        return UserName;
+    public void setId(long UserId) {
+        this.id = UserId;
     }
-    public void setUserName(String UserName) {
-        this.UserName = UserName;
+    public String getLogin() {
+        return login;
     }
-    public String getUserLastName() {
-        return UserLastName;
+    public void setLogin(String UserLogin) {
+        this.login = UserLogin;
     }
-    public void setUserLastName(String UserLastName) {
-        this.UserLastName = UserLastName;
+    public String getFirstname() {
+        return firstname;
     }
-    public String getUserBirth() {
-        return UserBirth;
+    public void setFirstname(String UserName) {
+        this.firstname = UserName;
     }
-    public void setUserBirth(String UserBirth) {
-        this.UserBirth = UserBirth;
+    public String getLastname() {
+        return lastname;
+    }
+    public void setLastname(String UserLastName) {
+        this.lastname = UserLastName;
+    }
+    public String getBirth() {
+        return birth;
+    }
+    public void setBirth(String UserBirth) {
+        this.birth = UserBirth;
+    }
+    public Boolean getActive() {
+        return active;
+    }
+    public void setActive(Boolean UserActive) {
+        this.active=UserActive;
     }
 
 
