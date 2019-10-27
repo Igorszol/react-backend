@@ -34,32 +34,37 @@ import pw.backend.reactbackend.service.UserService;
     public String create(@RequestBody User newUser) {
         if (service.checkLogin(newUser.getLogin())==null) {
           repository.save(new User(newUser.getLogin(), newUser.getFirstname(), newUser.getLastname(), newUser.getBirth(), newUser.getActive()));
-            return "Success";
+            return "Successed";
         }
-        return "Failed";
+        return "Failed: 409";
 
     }
-    @GetMapping("/findbylogin/{login}")
-    public String findByLogin(@PathVariable String login) {
+    @GetMapping("/retrievebylogin/{login}")
+    public String retrieveByLogin(@PathVariable String login) {
         User user = repository.findByLogin(login);
         if(user == null)
-            return "No user";
+            return "Failed: 404";
         return user.ToString();
     }
 
-    @PutMapping("/upload")
-    public String upload(@RequestBody User newUser) {
-        User user=service.checkLogin(newUser.getLogin());
-        if(user==null) return "No user";
-        user=newUser;
-        return "User uploaded";
+    @PutMapping("/updatebylogin/{login}")
+    public String update(@PathVariable String login,@RequestBody User newUser) {
+        User user=repository.findByLogin(login);
+        if(user==null) return "Failed: 404";
+        user.setLogin(newUser.getLogin());
+        user.setFirstname(newUser.getFirstname());
+        user.setLastname(newUser.getLastname());
+        user.setBirth(newUser.getBirth());
+        user.setActive(newUser.getActive());
+        repository.save(user);
+        return "Successed";
     }
 
     @DeleteMapping("/deletebylogin/{login}")
     public String deleteByLogin(@PathVariable String login) {
         User user = repository.findByLogin(login);
-        if (user == null) return "No user";
+        if (user == null) return "Failed: 404";
         repository.delete(user);
-        return "User delated";
+        return "Successed";
     }
 }
