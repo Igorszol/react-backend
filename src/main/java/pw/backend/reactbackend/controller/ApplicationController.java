@@ -47,4 +47,19 @@ import pw.backend.reactbackend.service.UserService;
         return user.ToString();
     }
 
+    @PutMapping("/upload")
+    public String upload(@RequestBody User newUser) {
+        User user=service.checkLogin(newUser.getLogin());
+        if(user==null) return "No user";
+        user=newUser;
+        return "User uploaded";
+    }
+
+    @DeleteMapping("/deletebylogin/{login}")
+    public String deleteByLogin(@PathVariable String login) {
+        User user = repository.findByLogin(login);
+        if (user == null) return "No user";
+        repository.delete(user);
+        return "User delated";
+    }
 }
