@@ -5,14 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pw.backend.reactbackend.entity.User;
 import pw.backend.reactbackend.repository.UserRepository;
 import pw.backend.reactbackend.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
-    @RequestMapping("/backend")
+    @RequestMapping("/users")
     public class ApplicationController {
 
     @Autowired
@@ -23,48 +27,31 @@ import pw.backend.reactbackend.service.UserService;
 
 
 
-    @GetMapping(value = "/findall")
+    @GetMapping(path = "")
     public List<User> findAll() {
-
         List<User> users = (ArrayList<User>) repository.findAll();
         return users;
     }
 
-    @PostMapping(value = "/create")
-    public String create(@RequestBody User newUser) {
-        if (service.checkLogin(newUser.getLogin())==null) {
-          repository.save(new User(newUser.getLogin(), newUser.getFirstname(), newUser.getLastname(), newUser.getBirth(), newUser.getActive()));
-            return "Successed";
-        }
-        return "Failed: 409";
-
+    @PostMapping(path = "")
+    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
+        return ResponseEntity.ok().body(repository.save(user));
     }
-    @GetMapping("/retrievebylogin/{login}")
-    public String retrieveByLogin(@PathVariable String login) {
-        User user = repository.findByLogin(login);
-        if(user == null)
-            return "Failed: 404";
-        return user.ToString();
+    @GetMapping(path = "/{login}")
+    public ResponseEntity<User> findByLogin(@PathVariable String login) {
+        return new ResponseEntity<User>(service.FindByLogin(login), HttpStatus.OK);
     }
 
-    @PutMapping("/updatebylogin/{login}")
-    public String update(@PathVariable String login,@RequestBody User newUser) {
-        User user=repository.findByLogin(login);
-        if(user==null) return "Failed: 404";
-        user.setLogin(newUser.getLogin());
-        user.setFirstname(newUser.getFirstname());
-        user.setLastname(newUser.getLastname());
-        user.setBirth(newUser.getBirth());
-        user.setActive(newUser.getActive());
-        repository.save(user);
-        return "Successed";
+
+    @PatchMapping(path = "")
+    public ResponseEntity<User> updateUser(@RequestBody @Valid User updatedUser) {
+        return ResponseEntity.ok().body(service.updateUser(updatedUser));
     }
 
-    @DeleteMapping("/deletebylogin/{login}")
+    @DeleteMapping("/{login}")
     public String deleteByLogin(@PathVariable String login) {
-        User user = repository.findByLogin(login);
-        if (user == null) return "Failed: 404";
+        User user = service.FindByLogin(login);
         repository.delete(user);
-        return "Successed";
+        return "User deleted.";
     }
 }
