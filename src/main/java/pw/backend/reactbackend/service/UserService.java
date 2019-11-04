@@ -9,9 +9,12 @@ import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class UserService {
-    @Autowired
-    UserRepository repository;
+    private UserRepository repository;
 
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.repository = userRepository;
+    }
 
     public User FindByLogin(String login) {
         User user = repository.findByLogin(login);

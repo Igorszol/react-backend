@@ -24,7 +24,7 @@ public class User {
 
     @Column(name = "active")
     private Boolean active;
-    protected User() {
+    public User() {
     }
 
     public User(String login, String firstName, String lastName,String birth,Boolean active) {

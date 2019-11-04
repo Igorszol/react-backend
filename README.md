@@ -1,4 +1,2 @@
-# react-backend
-Initial backand repository for labs.
 
-Coś tutaj powinno byc
+AWS: http://reactbackend2.xhbv2bee3z.us-east-1.elasticbeanstalk.com/
